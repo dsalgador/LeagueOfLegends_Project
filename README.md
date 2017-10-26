@@ -1,5 +1,7 @@
 # Open data analysis to predict the results of the League of Legends World Championship
 
+Project members: Josep Castell, Sergi Laut  & Daniel Salgado
+
 ## Abstract
  League of Legends (LoL) is a MOBA which has become the online computer game with more active users in the world. In League of Legends, players assume the role of an unseen "summoner" that controls a "champion" with unique abilities and battle against a team of other players. Each team usually consists of five players and the main goal is to destroy the opposing team's "nexus", a structure which lies at the heart of a base protected by defensive structures ("turrets") situated along the three streets or lanes that constitute the map. There are currently 138 champions in League of Legends (by October 2017) which are classified in different types or classes which generally determine what part of the map the champions gravitates towards during the early game. There is the top-lane player, the mid-lane player, two bot-lane players which play together, and the player who heads to the "jungle", the areas of the map that lie between the three mentioned lanes.
 
