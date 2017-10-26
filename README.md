@@ -1,4 +1,4 @@
-#League of Legends logistic regression model to predict the winner team of a World's match
+# League of Legends logistic regression model to predict the winner team of a World's match
 
 Data sources:
 
