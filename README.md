@@ -2,7 +2,7 @@
 
 Data sources:
 
-* Matches: http://oracleselixir.com/match-data/
+* Matches: http://oracleselixir.com/match-data/, Data Dictionary: http://oracleselixir.com/match-data/match-data-dictionary/
 * http://champion.gg/ API
 * Riot API: https://developer.riotgames.com/
 * https://lol.gamepedia.com/playername (example: playername = Faker)
