@@ -103,22 +103,24 @@ winrate_pair <- function(champ1, champ2, POSITION){
 winrate_match <- function(team1, team2){
   #team1 and team2 must be arrays of characters containing the names of
   #the champions played in each team and in this order:
-  #c(ADC, SUP, MID, JNG, TOP).
+  #c(TOP, JNG, MID,  ADC, SUP).
+  
+  #An array containing the champion-matchup winrates of the team1 is returned
   if(length(team1) != length(team2)){return("Team lengths are different");}
   
-  adcwr <- winrate_pair(team1[1], team2[1], ADCs)
-  supwr <- winrate_pair(team1[2], team2[2], SUPs)
+  adcwr <- winrate_pair(team1[4], team2[4], ADCs)
+  supwr <- winrate_pair(team1[5], team2[5], SUPs)
   midwr <- winrate_pair(team1[3], team2[3], MIDs)
-  jngwr <- winrate_pair(team1[4], team2[4], JNGs)
-  topwr <- winrate_pair(team1[5], team2[5], TOPs)
-  winrates1 = c(adcwr, supwr, midwr, jngwr, topwr) 
+  jngwr <- winrate_pair(team1[2], team2[2], JNGs)
+  topwr <- winrate_pair(team1[1], team2[1], TOPs)
+  winrates1 = c(topwr, jngwr,midwr, adcwr, supwr) 
   return(winrates1);
   
 }
 
 #Example:
-team1= c("Miss Fortune", "Leona", "Yasuo", "Lee Sin", "Tryndamere")
-team2 = c("Lucian", "Janna", "Taliyah", "Xin Zhao", "Dr. Mundo")
+team1= c("Tryndamere","Lee Sin", "Yasuo", "Miss Fortune", "Leona")
+team2 = c("Dr. Mundo", "Xin Zhao", "Taliyah", "Lucian", "Janna" )
 
 winrate_match(team1, team2)
 
