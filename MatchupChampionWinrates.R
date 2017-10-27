@@ -5,6 +5,7 @@ library(dplyr)
 
 
 url <- "http://ddragon.leagueoflegends.com/cdn/7.19.1/data/en_US/champion.json"
+#GitHub saved as: champion_info.json
 data <- fromJSON(url, simplifyVector = TRUE, simplifyDataFrame =  TRUE)
 
 n_champs = 138
@@ -20,6 +21,7 @@ champ_data = data.table(name = champ_names, id = champ_ids)
 setkey(champ_data,id)  
 
 url2 <- "http://api.champion.gg/v2/champions?&champData=matchups&limit=200&api_key=11a8590ff111c8c2f6d76c43a355b32d"
+#GitHub saved as: champion_matchups.json
 
 data2 <- fromJSON(url2, simplifyVector = TRUE, simplifyDataFrame =  TRUE)
 data2$"_id"$championId
@@ -120,3 +122,19 @@ team2 = c("Lucian", "Janna", "Taliyah", "Xin Zhao", "Dr. Mundo")
 
 winrate_match(team1, team2)
 
+#IMPORTANT: if some champion mathes have no data available, the winrate is
+#set to 1.00.
+
+
+
+
+# setwd("C:/Users/Daniel/Dropbox/GitHub/LeagueOfLegends_Model")
+# ##Exporting the files used:
+# exportJson1 <- toJSON(data)
+# exportJson2 <- toJSON(data2)
+# ## Save the JSON to file
+# write(exportJson1, file="champ_names_and_ids.JSON")
+# write(exportJson2, file="champ_matchups.JSON")
+# 
+# json_data <- fromJSON("champ_names_and_ids.JSON")
+# json_data2 <- fromJSON("champ_matchups.JSON")
