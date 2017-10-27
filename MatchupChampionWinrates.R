@@ -41,8 +41,8 @@ JNGs<- champs %>%  filter(role == 'JUNGLE') %>% select(id, name, winrate)%>% as.
 
 winrates_table <- function(POSITION, ROLE){
  
-  init = 1
-  POSITION[, as.character(POSITION$id):=1]
+  init = 0.5
+  POSITION[, as.character(POSITION$id):=init]
   row.names(POSITION) <- as.character(POSITION$id)
   m=length(data2$"matchups"[, ROLE])
   for(i in 1:m){
