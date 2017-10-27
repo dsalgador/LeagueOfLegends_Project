@@ -74,6 +74,8 @@ winrates_table <- function(POSITION, ROLE){
   }
 }
 
+
+
 winrates_table(ADCs, 'DUO_CARRY')
 winrates_table(MIDs, "MIDDLE")
 winrates_table(SUPs, "DUO_SUPPORT")
@@ -97,7 +99,9 @@ name2id <- function(NAME, TABLE){
 
 winrate_pair <- function(champ1, champ2, POSITION){
   wr <- as.numeric(POSITION[name == champ1, which(colnames(POSITION) == name2id(champ2, POSITION) ), with = FALSE])
-  return(wr)
+  if(length(wr) == 1){  return(wr)}
+  else if(length(wr) == 0){return(0.5)}
+  else{return(0.5)}
 }
 
 winrate_match <- function(team1, team2){
