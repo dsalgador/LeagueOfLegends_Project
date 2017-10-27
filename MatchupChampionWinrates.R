@@ -114,6 +114,9 @@ winrate_match <- function(team1, team2){
   jngwr <- winrate_pair(team1[2], team2[2], JNGs)
   topwr <- winrate_pair(team1[1], team2[1], TOPs)
   winrates1 = c(topwr, jngwr,midwr, adcwr, supwr) 
+  #If some matchup has no data available, so that there is a NA value
+  # we assign a winrate equal to 0.5
+  winrates1[is.na(winrates1)] <- 0.5
   return(winrates1);
   
 }
