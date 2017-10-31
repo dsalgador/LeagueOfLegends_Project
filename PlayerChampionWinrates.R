@@ -9,12 +9,14 @@ df <- data[2:dim(data)[1], c("champion", "Aplayer", "winrate", "kda")]
 
 winrate_player <- function(champ_name,player_name){
   wr <- df[champion == champ_name & Aplayer == player_name]$winrate
-  return(wr)
+  if(length(wr)<1) return(mean(df[Aplayer == player_name]$winrate, na.rm = T)) 
+  else  return(wr)
 }
 
 kda_player <- function(champ_name,player_name){
   kda <- df[champion == champ_name & Aplayer == player_name]$kda
-  return(kda)
+  if(length(kda)<1) return(mean(df[Aplayer == player_name]$kda, na.rm = T)) 
+  else return(kda)
 }
 
 
