@@ -5,22 +5,30 @@ library(rjson)
 data <- fromJSON("players_info.json")
 data <- as.data.table(data)
 data[, winrate:= as.numeric(win)/(as.numeric(win)+as.numeric(lose))]
-df <- data[2:dim(data)[1], c("champion", "Aplayer", "winrate", "kda")]
+df_players <- data[2:dim(data)[1], c("champion", "Aplayer", "winrate", "kda")]
 
 winrate_player <- function(champ_name,player_name){
-  wr <- df[champion == champ_name & Aplayer == player_name]$winrate
-  if(length(wr)<1) return(mean(df[Aplayer == player_name]$winrate, na.rm = T)) 
+  wr <- df_players[champion == champ_name & Aplayer == player_name]$winrate
+  if(length(wr)<1) return(mean(df_players[Aplayer == player_name]$winrate, na.rm = T)) 
   else  return(wr)
 }
 
 kda_player <- function(champ_name,player_name){
-  kda <- df[champion == champ_name & Aplayer == player_name]$kda
-  if(length(kda)<1) return(mean(df[Aplayer == player_name]$kda, na.rm = T)) 
+  kda <- df_players[champion == champ_name & Aplayer == player_name]$kda
+  if(length(kda)<1) return(mean(df_players[Aplayer == player_name]$kda, na.rm = T)) 
   else return(kda)
 }
 
-
-
+winrate_teamplayers <- function(team_champs, team_players){
+  #c(TOP, JNG, MID,  ADC, SUP).
+  adcwr <- winrate_player(team_champs[4], team_players[4])
+  supwr <- winrate_player(team_champs[5], team_players[5])
+  midwr <- winrate_player(team_champs[3], team_players[3])
+  jngwr <- winrate_player(team_champs[2], team_players[2])
+  topwr <- winrate_player(team_champs[1], team_players[1])
+  winrates <- c(topwr, jngwr,midwr, adcwr, supwr) 
+  return(winrates)
+}
 
 
 
