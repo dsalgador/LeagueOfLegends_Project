@@ -2,20 +2,24 @@ setwd("C:/Users/Daniel/Dropbox/GitHub/LeagueOfLegends_Model")
 
 
 library(rjson)
-data <- fromJSON("players_info.json")
+data <- fromJSON("players_info2.json")
 data <- as.data.table(data)
 data[, winrate:= as.numeric(win)/(as.numeric(win)+as.numeric(lose))]
-df_players <- data[2:dim(data)[1], c("champion", "Aplayer", "winrate", "kda")]
+df_players <- data[2:dim(data)[1], c("champion", "player", "winrate", "kda")]
 
 winrate_player <- function(champ_name,player_name){
-  wr <- df_players[champion == champ_name & Aplayer == player_name]$winrate
-  if(length(wr)<1) return(mean(df_players[Aplayer == player_name]$winrate, na.rm = T)) 
+  wr <- df_players[champion == champ_name & player == player_name]$winrate
+  if(length(wr)<1 || is.nan(wr)){
+    wr <- mean(df_players[player == player_name]$winrate, na.rm = T)
+    if(length(wr)<1 || is.nan(wr)){return(0.5);}
+    else return(wr);
+  }
   else  return(wr)
 }
 
 kda_player <- function(champ_name,player_name){
-  kda <- df_players[champion == champ_name & Aplayer == player_name]$kda
-  if(length(kda)<1) return(mean(df_players[Aplayer == player_name]$kda, na.rm = T)) 
+  kda <- df_players[champion == champ_name & player == player_name]$kda
+  if(length(kda)<1) return(mean(df_players[player == player_name]$kda, na.rm = T)) 
   else return(kda)
 }
 
