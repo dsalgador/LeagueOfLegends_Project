@@ -19,8 +19,8 @@ fields <- c("result", "gameid", "playerid", "side", "position", "player", "team"
 dfs <- subset(df, select = fields)
 
 game_ids <- unique(dfs$"gameid")
-#num_games <- length(game_ids)
-num_games = 1
+num_games <- length(game_ids)
+#num_games = 1
 #With this function we obtain the train data of all matches of the df read data
 fill_traindata <- function(){
   for(j in 1:num_games){
@@ -77,7 +77,11 @@ fill_traindata <- function(){
   return(train_data)
 }
 train_data <- fill_traindata()
+#Check there are no NaN in the trian_data table
+#sum(sapply(train_data, is.na))
 
+
+write.csv(train_data, "train_data.csv")
 #Check if there are missing values in the train_data
 #library(Amelia)
 #missmap(train_data, main = "Missing values vs observed")
