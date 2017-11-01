@@ -2,7 +2,7 @@ setwd("C:/Users/Daniel/Dropbox/GitHub/LeagueOfLegends_Model")
 
 
 library(rjson)
-data <- fromJSON("players_info2.json")
+data <- fromJSON("players_info.json")
 data <- as.data.table(data)
 data[, winrate:= as.numeric(win)/(as.numeric(win)+as.numeric(lose))]
 df_players <- data[2:dim(data)[1], c("champion", "player", "winrate", "kda")]
