@@ -2,20 +2,39 @@
 #Model fitting  
 ########################
 setwd("C:/Users/Daniel/Dropbox/GitHub/LeagueOfLegends_Model")
-train_data <- read.csv("train_data.csv")
-test_data <- read.csv("test_data.csv")
+
+model = 1
+if (model == 1){
+  train_data <- read.csv("train_data.csv")
+  test_data <- read.csv("test_data.csv")
+} else if (model == 2){
+ train_data <- read.csv("train_data_2ndmodel.csv")
+test_data <- read.csv("test_data_2ndmodel.csv") 
+} else {
+  print("Invalid model number (only 1 or 2 allowed)")}
 
 
-results <- train_data$result
-train_data[ train_data == 0] <- 0.25
-train_data[ train_data == 1] <- 0.75
-train_data$result = results
+withoutChampiongginfo <- T
+if(withoutChampiongginfo){
+  train_data <- train_data[, c(1:3, 9:13)]
+  test_data <- test_data[, c(1:3, 9:13)]
+}
+
+avoid_0and1 <- F
+if(avoid_0and1){
+  results <- train_data$result
+  wr_min = 0.25
+  wr_max = 0.75
+  train_data[ train_data == 0] <- wr_min
+  train_data[ train_data == 1] <- wr_max
+  train_data$result = results}
 
 #when SF, F, and QF was not available:
 # train <- train_data[1:150,]
 # test <- train_data[151:180,]
 train <- train_data
 test <- test_data
+
 
 model <- glm(result ~.,family=binomial(link='logit'),data=train)
 summary(model)
@@ -38,14 +57,14 @@ pR2(model)
 #Assessing the predictive ability of the model
 ############################
 #All
-test
+#test
 #Quarter finals
-#test <- test[1:34]
+#test <- test[1:34,]
 #Semi finals
-#test <- test[35:52] 
+#test <- test[35:52,] 
 
 #Final
-test <- tail(test)
+#test <- tail(test)
 
 
 fitted.results <- predict(model,newdata=test,type='response')
@@ -73,3 +92,4 @@ auc <- auc@y.values[[1]]
 auc
 
 
+#varImp(model)
