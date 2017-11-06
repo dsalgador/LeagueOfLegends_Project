@@ -1,8 +1,18 @@
 ########################
-#Model fitting
-#########################
-train <- train_data[1:150,]
-test <- train_data[151:180,]
+#Model fitting  
+########################
+
+
+results <- train_data$result
+train_data[ train_data == 0] <- 0.25
+train_data[ train_data == 1] <- 0.75
+train_data$result = results
+
+#when SF, F, and QF was not available:
+# train <- train_data[1:150,]
+# test <- train_data[151:180,]
+train <- train_data
+test <- test_data
 
 model <- glm(result ~.,family=binomial(link='logit'),data=train)
 summary(model)
@@ -24,9 +34,39 @@ pR2(model)
 #########################
 #Assessing the predictive ability of the model
 ############################
+#All
+test
+#Quarter finals
+#test <- test[1:34]
+#Semi finals
+#test <- test[35:52] 
+
+#Final
+test <- tail(test)
+
 
 fitted.results <- predict(model,newdata=test,type='response')
-fitted.results <- ifelse(fitted.results > 0.5,1,0)
+num_results <- length(fitted.results)
+for(i in seq(1,num_results, 2) ){
+  fitted.results[i] <- ifelse(fitted.results[i]>fitted.results[i+1],1,0)
+  fitted.results[i+1] <- abs(fitted.results[i]-1)
+}
+#fitted.results <- ifelse(fitted.results > 0.5,1,0)
+
+
 
 misClasificError <- mean(fitted.results != test$result) #proportion of failures 
 print(paste('Accuracy',1-misClasificError)) #proportion of right predictions
+
+
+library(ROCR)
+p <- predict(model, newdata=test, type="response")
+pr <- prediction(p, test$result)
+prf <- performance(pr, measure = "tpr", x.measure = "fpr")
+plot(prf)
+
+auc <- performance(pr, measure = "auc")
+auc <- auc@y.values[[1]]
+auc
+
+
