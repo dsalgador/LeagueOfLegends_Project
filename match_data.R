@@ -91,7 +91,7 @@ train_data <- fill_traindata()
 #sum(sapply(train_data, is.na))
 
 #Uncomment this in the first run
-#write.csv(train_data, "train_data.csv")
+write.csv(train_data, "train_data.csv", row.names = FALSE)
 
 
 
@@ -158,7 +158,7 @@ fill_testdata <- function(){
 test_data <- fill_testdata()
 
 #Uncomment this in the first run
-#write.csv(test_data, "test_data.csv")
+write.csv(test_data, "test_data.csv", row.names = FALSE)
 
 
 #Check if there are missing values in the train_data
