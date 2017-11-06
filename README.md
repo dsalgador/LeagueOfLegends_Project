@@ -18,6 +18,11 @@ The aim of our project is to predict some of the results of the 2017 World Champ
 
 The .xlsx files have been converted to .cvs via the web page https://convertio.co/es/xlsx-csv/
 
+## References
+Logistic regression resources:
+* https://www.r-bloggers.com/how-to-perform-a-logistic-regression-in-r/
+* https://www.r-bloggers.com/evaluating-logistic-regression-models/
+
 ## License
 
 Unless otherwise stated, all material is licensed under a Creative Commons Attribution-ShareAlike 3.0 License. This means you are free to copy, distribute and transmit the work, adapt it to your needs as long as you cite its origin and, if you do redistribute it, do so under the same license.
