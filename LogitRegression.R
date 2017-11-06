@@ -1,6 +1,9 @@
 ########################
 #Model fitting  
 ########################
+setwd("C:/Users/Daniel/Dropbox/GitHub/LeagueOfLegends_Model")
+train_data <- read.csv("train_data.csv")
+test_data <- read.csv("test_data.csv")
 
 
 results <- train_data$result
