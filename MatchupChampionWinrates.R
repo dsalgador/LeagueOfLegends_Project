@@ -2,11 +2,13 @@ library("rjson")
 library(jsonlite)
 library(data.table) 
 library(dplyr)
+setwd("C:/Users/Daniel/Dropbox/GitHub/LeagueOfLegends_Model")
 
 
 url <- "http://ddragon.leagueoflegends.com/cdn/7.19.1/data/en_US/champion.json"
-#GitHub saved as: champion_info.json
-data <- fromJSON(url, simplifyVector = TRUE, simplifyDataFrame =  TRUE)
+#GitHub saved as: champ_info.json
+#data <- fromJSON(url, simplifyVector = TRUE, simplifyDataFrame =  TRUE)
+data <- fromJSON("champ_info.json")
 
 n_champs = 138
 champ_names = numeric(n_champs)
@@ -21,9 +23,11 @@ champ_data = data.table(name = champ_names, id = champ_ids)
 setkey(champ_data,id)  
 
 url2 <- "http://api.champion.gg/v2/champions?&champData=matchups&limit=200&api_key=11a8590ff111c8c2f6d76c43a355b32d"
-#GitHub saved as: champion_matchups.json
 
-data2 <- fromJSON(url2, simplifyVector = TRUE, simplifyDataFrame =  TRUE)
+
+#GitHub saved as: champion_matchups.json
+data2 <- fromJSON("champion_matchups_patch7_21.json")
+#data2 <- fromJSON(url2, simplifyVector = TRUE, simplifyDataFrame =  TRUE)
 data2$"_id"$championId
 
 champs = data.table(id =data2$championId)

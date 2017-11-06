@@ -1,10 +1,13 @@
 setwd("C:/Users/Daniel/Dropbox/GitHub/LeagueOfLegends_Model")
 
+####################
+# TRAIN DATA
+####################
 # set bolean to 1 and coment the line
 bolean <- 1
 if(bolean == 1){
   #df <- read.csv("2016_CompleteMatchData.csv", header = T,na.strings=c(""))
-  df <- read.csv("2017_WorldsMatchData.csv", header = T,na.strings=c(""))
+  df <- read.csv("2017_WorldsMatchData_train.csv", header = T,na.strings=c(""))
   bolean = 0;
 }
 
@@ -80,8 +83,25 @@ train_data <- fill_traindata()
 #Check there are no NaN in the trian_data table
 #sum(sapply(train_data, is.na))
 
+#Uncomment this in the first run
+#write.csv(train_data, "train_data.csv")
 
-write.csv(train_data, "train_data.csv")
+
+
+####################
+# TEST DATA
+####################
+
+
+
+
+
+
+
+
+
+
+
 #Check if there are missing values in the train_data
 #library(Amelia)
 #missmap(train_data, main = "Missing values vs observed")
