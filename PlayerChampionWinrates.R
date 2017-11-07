@@ -34,8 +34,10 @@ winrate_teamplayers <- function(team_champs, team_players){
   return(winrates)
 }
 
-
-
+#Example
+team_champs = c("Trundle", "Sejuani", "Orianna", "Twitch",  "Janna")
+team_players = c("Huni",  "Blank", "Faker", "Bang",  "Wolf")
+round(winrate_teamplayers(team_champs, team_players),2)
 
 
 
