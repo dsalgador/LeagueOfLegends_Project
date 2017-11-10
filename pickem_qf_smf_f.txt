@@ -1,0 +1,9 @@
+Barón Nashor,77932,2.2,40
+Dragón,104221,3.0,35
+Coloso Celeste,169607,4.9,30
+Ancestro Ígneo,1713381,49,25
+Picuchillo Carmesí TÚ,744082,21,20
+Krug Ancestral,440510,13,15
+Espectro,147160,4.2,10
+Lóbrego Mayor,67264,1.9,5
+Poro,16146,0.46,0
