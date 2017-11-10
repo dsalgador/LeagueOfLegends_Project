@@ -38,26 +38,3 @@ winrate_teamplayers <- function(team_champs, team_players){
 team_champs = c("Trundle", "Sejuani", "Orianna", "Twitch",  "Janna")
 team_players = c("Huni",  "Blank", "Faker", "Bang",  "Wolf")
 round(winrate_teamplayers(team_champs, team_players),2)
-
-
-
-# 
-# 
-# 
-# df <- read.csv("data957.csv", header = T)
-# 
-# df <- subset(df, select = c("champion", "kda", "win", "lose"))[2:length(rownames(df)),]
-# 
-# df <- as.data.table(df)
-# df[, winrate:= win/(win+lose)]
-# df<- subset(df, select = c("champion", "winrate", "kda"))
-# 
-# winrate_player <- function(champ_name,player_name){
-#   df <- JSON_file$player_name
-#   wr <- df[champion == champ_name ,"winrate"][[1]]
-#   return(wr)
-# }
-# 
-# 
-# write.csv(df, file ="957.csv", row.names = FALSE)
-# #df[champion == "Maokai" ,"winrate"]
