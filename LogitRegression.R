@@ -27,7 +27,8 @@ if(avoid_0and1){
   wr_max = 0.75
   train_data[ train_data == 0] <- wr_min
   train_data[ train_data == 1] <- wr_max
-  train_data$result = results}
+  train_data$result = results
+  }
 
 #when SF, F, and QF was not available:
 # train <- train_data[1:150,]
@@ -35,6 +36,14 @@ if(avoid_0and1){
 train <- train_data
 test <- test_data
 
+
+if(model == 1){
+  model1 <- glm(result ~.,family=binomial(link='logit'),data=train)
+  
+}else if (model == 2){
+  model2 <- glm(result ~.,family=binomial(link='logit'),data=train)
+  
+}
 
 model <- glm(result ~.,family=binomial(link='logit'),data=train)
 summary(model)
@@ -93,3 +102,27 @@ auc
 
 
 #varImp(model)
+
+###########################
+#############################
+anova(model1, model2, test ="Chisq")
+
+library(lmtest)
+#install.packages("lmtest")
+lrtest(model1, model2)
+
+
+quiniela <- read.csv("quniela_qf_smf_f.txt", header = F)
+colnames(quiniela) <- c("name", "people", "percentage", "points")
+quiniela <- as.data.table(quiniela)
+quiniela[, accuracy:=points/40]
+quiniela[, percentage:=percentage/100]
+
+mean_accuracy <- 0
+for(i in 1:9){
+  mean_accuracy = mean_accuracy + quiniela[i,"percentage"] * quiniela[i,"accuracy"]
+}
+
+###To print for the report:
+train_data_print <- head(train_data ,2)
+train_data_print[, 4:13] <- round(train_data_print[, 4:13],2)
