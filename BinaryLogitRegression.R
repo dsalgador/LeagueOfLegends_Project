@@ -2,7 +2,7 @@
 #Model fitting  
 ########################
 setwd("C:/Users/Daniel/Dropbox/GitHub/LeagueOfLegends_Model")
-
+library(ROCR)
 
 train_data <- read.csv("train_data.csv")
 test_data <- read.csv("test_data.csv")
@@ -61,29 +61,74 @@ pR2(model)
 #Final
 #test <- tail(test)
 
-#Criteria
-fitted.results <- predict(model,newdata=test,type='response')
-num_results <- length(fitted.results)
-for(i in seq(1,num_results, 2) ){
-  fitted.results[i] <- ifelse(fitted.results[i]>fitted.results[i+1],1,0)
-  fitted.results[i+1] <- abs(fitted.results[i]-1)
+
+prf_list <- list()
+accuracies <- numeric(4)
+auc_list <- numeric(4)
+
+for(j in 1:4){
+  
+  if(j == 1){
+    #test ==all train_data
+    } else if(j==2){ #quarter finals
+      test <- test_data[1:34,]
+  }else if(j==3){#semi finals
+      test <- test_data[35:52,] 
+  }else{#Final
+    test <- tail(test_data)
+  }
+  
+  #Criteria
+  fitted.results <- predict(model,newdata=test,type='response')
+  num_results <- length(fitted.results)
+  for(i in seq(1,num_results, 2) ){
+    fitted.results[i] <- ifelse(fitted.results[i]>fitted.results[i+1],1,0)
+    fitted.results[i+1] <- abs(fitted.results[i]-1)
+  }
+  
+  misClasificError <- mean(fitted.results != test$result) #proportion of failures 
+  #print(paste('Accuracy',1-misClasificError)) #proportion of right predictions
+  accuracies[[j]] = 1-misClasificError
+  
+  p <- predict(model, newdata=test, type="response")
+  pr <- prediction(p, test$result)
+  prf <- performance(pr, measure = "tpr", x.measure = "fpr")
+  prf_list[[j]] = prf
+  # plot(prf)
+  # title("Finals")
+  
+  auc <- performance(pr, measure = "auc")
+  auc <- auc@y.values[[1]]
+  auc_list[j] = auc
+  #varImp(model)
 }
 
-misClasificError <- mean(fitted.results != test$result) #proportion of failures 
-print(paste('Accuracy',1-misClasificError)) #proportion of right predictions
+######################
+# GRAPHICS, PLOTS
+####################
+
+library(ggplot2)
+# Basic barplot
+df_auc <- data.frame(stage=c("QF+SF+F", "QF", "SF", "F"),
+                     auc=auc_list)
 
 
-library(ROCR)
-p <- predict(model, newdata=test, type="response")
-pr <- prediction(p, test$result)
-prf <- performance(pr, measure = "tpr", x.measure = "fpr")
-plot(prf)
+p<-ggplot(data=df_auc, aes(x=stage, y=auc)) +
+  geom_bar(stat="identity") +
+  geom_text(aes(label=round(auc,2)), vjust=1.6, color="white", size=3.5)
+#+  theme_minimal()
+p + scale_x_discrete(limits=df_auc$stage)
 
-auc <- performance(pr, measure = "auc")
-auc <- auc@y.values[[1]]
-auc
 
-#varImp(model)
+# Horizontal bar plot
+#p + coord_flip()
+
+
+
+barplot(auc_list)
+
+
+
 
 ####################
 #Pick'em vs model analyses
