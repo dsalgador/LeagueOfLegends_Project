@@ -34,7 +34,7 @@ prf_listOf_prf_lists <- list()
 library(ROCR)
 
 
-for(version in 1:4){
+for(version in 3:3){
   train_data <- read.csv("train_data.csv")
   test_data <- read.csv("test_data.csv")
   
@@ -182,7 +182,7 @@ for(version in 1:4){
   ####################
   library(ggplot2)
   
-  
+  version_name <- paste("Model v", version, sep = "")
   ###########
   #AUC plots
   ###########
@@ -194,7 +194,7 @@ for(version in 1:4){
     geom_bar(stat="identity") +
     geom_text(aes(label=round(auc,2)), vjust=1.6, color="white", size=3.5)
   p <- p + scale_x_discrete(limits=df_auc$stage)
-  p <- p + labs(title="AUC per pick'em stage", x="Stage", y = "AUC")
+  p <- p + labs(title=paste("AUC",version_name), x="Pick'em stage", y = "AUC")
   p <- p + theme(plot.title = element_text(hjust = 0.5))
   plots_p[[version]] <- p
   
@@ -208,10 +208,10 @@ for(version in 1:4){
   p2<-ggplot(data=df_acc, aes(x=stage, y=acc)) +
     geom_bar(stat="identity") +
     geom_hline(yintercept = mean_accuracy[[1]]) +
-    annotate("text", 'F', mean_accuracy[[1]], vjust = -1, label = "Mean pick'em accuracy")+
+    #annotate("text", 'F', mean_accuracy[[1]], vjust = -1, label = "Mean pick'em accuracy")+
     geom_text(aes(label=round(acc,2)), vjust=1.6, color="white", size=3.5)
   p2 <- p2 + scale_x_discrete(limits=df_acc$stage)
-  p2 <- p2 + labs(title="Model prediction accuracy per pick'em stage", x="Stage", y = "Accuracy")
+  p2 <- p2 + labs(title=paste("Accuracy", version_name), x="Pick'em stage", y = "Accuracy")
   p2 <- p2 + theme(plot.title = element_text(hjust = 0.5))
   #p2 <- p2 +  geom_hline(yintercept = mean_accuracy[[1]]) 
   plots_p2[[version]] <- p2
@@ -228,7 +228,7 @@ for(version in 1:4){
     geom_text(aes(label=round(overall,2)), vjust=1.6, color="white", size=3.5)
   
   p3 <- p3 + scale_x_discrete(limits=df_varimp$field)
-  p3 <- p3 + labs(title="Field importance", x="Field", y = "Importance")
+  p3 <- p3 + labs(title=paste("Field importance", version_name), x="Field", y = "Importance (abs(t-statistic))")
   p3 <- p3 + theme(plot.title = element_text(hjust = 0.5))
   plots_p3[[version]] <- p3
   
@@ -245,6 +245,7 @@ for(version in 1:4){
 }
 
 ######MULTIPLE PLOTS FUNCTION
+#Source code: http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/
 # Multiple plot function
 #
 # ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
@@ -296,12 +297,16 @@ multiplot(plotlist = plots_p2, cols = 4)
 multiplot(plotlist = plots_p3[c(2,4)], cols = 2)
 plots_p3[2]
 
-par(mfrow = c(2,2))
+#par(mfrow = c(2,2),pty="m")
+par(mfrow = c(1,4), pty = 's')
 for(ver in 1:4){
   prf_list = prf_listOf_prf_lists[[ver]]
-  plot(prf_list[[1]])
-  plot(prf_list[[2]], add = TRUE, col=2, lty = 2)
-  plot(prf_list[[3]], add = TRUE, col=3, lty = 2)
-  plot(prf_list[[4]], add = TRUE, col=4, lty = 2)
-
+  plot(prf_list[[1]], xlim = c(0,1), ylim = c(0,1), lwd =1.5)
+  plot(prf_list[[2]], add = TRUE, col=2, lty = 2, lwd =1.5)
+  plot(prf_list[[3]], add = TRUE, col=3, lty = 2, lwd =1.5)
+  plot(prf_list[[4]], add = TRUE, col=4, lty = 2, lwd =1.5)
+  
 }
+
+par(mfrow = c(1,1), pty = 'm')
+
