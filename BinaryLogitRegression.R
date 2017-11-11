@@ -7,12 +7,19 @@ library(ROCR)
 train_data <- read.csv("train_data.csv")
 test_data <- read.csv("test_data.csv")
 
+withTeamsinfo <- T #1
+withSideinfo <- T  #1
+withChampiongginfo <- T #5
+withPlayerinfo <- T
 
-withoutChampiongginfo <- T
-if(withoutChampiongginfo){
-  train_data <- train_data[, c(1:3, 9:13)]
-  test_data <- test_data[, c(1:3, 9:13)]
-}
+field_names <- names(train_data)
+selected_fields <- c(field_names[1])
+if(withTeamsinfo){selected_fields <- c(selected_fields, field_names[2] )}
+if(withSideinfo){selected_fields <- c(selected_fields, field_names[3] )}
+if(withChampiongginfo){selected_fields <- c(selected_fields, field_names[4:8] )}
+if(withPlayerinfo){selected_fields <- c(selected_fields, field_names[9:13] )}
+
+train_data <- subset(train_data, select = selected_fields)
 
 avoid_0and1 <- F
 if(avoid_0and1){
@@ -44,6 +51,40 @@ anova(model, test="Chisq")
 library(pscl)
 #While no exact equivalent to the R2 of linear regression exists, the McFadden R2 index can be used to assess the model fit.
 pR2(model)
+
+
+library(aod)
+#install.packages("aod")
+
+####CIs
+confint(model)
+confint.default(model)
+
+names(model$coefficients)
+
+if(withTeamsinfo & withSideinfo & withChampiongginfo & withPlayerinfo){
+  ##WALD TEST: http://www.statisticshowto.com/wald-test/
+  #Overall effect of team names
+  wald.test(b = coef(model), Sigma = vcov(model), Terms = 2:24)
+  
+  #Overall effect of side of the map
+  wald.test(b = coef(model), Sigma = vcov(model), Terms = 25)
+  
+  #Overall effect of matchup_champion win rates
+  wald.test(b = coef(model), Sigma = vcov(model), Terms = 26:30)
+  wald.test(b = coef(model), Sigma = vcov(model), Terms = c(26,27,29,30))
+  
+  #Overall effect of player_champion win rates
+  wald.test(b = coef(model), Sigma = vcov(model), Terms = 31:35)
+  # wald.test(b = coef(model), Sigma = vcov(model), Terms = 31)
+  # wald.test(b = coef(model), Sigma = vcov(model), Terms = 32)
+  # wald.test(b = coef(model), Sigma = vcov(model), Terms = 33)
+  # wald.test(b = coef(model), Sigma = vcov(model), Terms = 34)
+  # wald.test(b = coef(model), Sigma = vcov(model), Terms = 35)
+  # 
+}
+
+
 
 
 #########################
@@ -112,20 +153,33 @@ library(ggplot2)
 df_auc <- data.frame(stage=c("QF+SF+F", "QF", "SF", "F"),
                      auc=auc_list)
 
-
 p<-ggplot(data=df_auc, aes(x=stage, y=auc)) +
   geom_bar(stat="identity") +
   geom_text(aes(label=round(auc,2)), vjust=1.6, color="white", size=3.5)
 #+  theme_minimal()
-p + scale_x_discrete(limits=df_auc$stage)
+p <- p + scale_x_discrete(limits=df_auc$stage)
+p <- p + labs(title="AUC per pick'em stage", x="Stage", y = "AUC")
+#p + theme_classic()
+p <- p + theme(plot.title = element_text(hjust = 0.5))
+p
+
+##Wr accuracies
+df_acc <- data.frame(stage=c("QF+SF+F", "QF", "SF", "F"),
+                     acc=accuracies)
+
+p2<-ggplot(data=df_acc, aes(x=stage, y=acc)) +
+  geom_bar(stat="identity") +
+  geom_text(aes(label=round(acc,2)), vjust=1.6, color="white", size=3.5)
+#+  theme_minimal()
+p2 <- p2 + scale_x_discrete(limits=df_acc$stage)
+p2 <- p2 + labs(title="Model prediction accuracy per pick'em stage", x="Stage", y = "Accuracy")
+#p + theme_classic()
+p2 <- p2 + theme(plot.title = element_text(hjust = 0.5))
+p2
 
 
-# Horizontal bar plot
-#p + coord_flip()
 
 
-
-barplot(auc_list)
 
 
 
