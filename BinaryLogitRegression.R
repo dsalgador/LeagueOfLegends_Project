@@ -7,7 +7,7 @@ library(ROCR)
 train_data <- read.csv("train_data.csv")
 test_data <- read.csv("test_data.csv")
 
-withTeamsinfo <- F #1
+withTeamsinfo <- T #1
 withSideinfo <- T  #1
 withChampiongginfo <-T #5
 withPlayerinfo <- T
@@ -31,9 +31,6 @@ if(avoid_0and1){
   train_data$result = results
 }
 
-#when SF, F, and QF was not available:
-# train <- train_data[1:150,]
-# test <- train_data[151:180,]
 train <- train_data
 test <- test_data
 
@@ -157,48 +154,60 @@ varImp(model)
 ####################
 
 library(ggplot2)
-# Basic barplot
+
+###########
+#AUC plots
+###########
+
 df_auc <- data.frame(stage=c("QF+SF+F", "QF", "SF", "F"),
                      auc=auc_list)
 
 p<-ggplot(data=df_auc, aes(x=stage, y=auc)) +
   geom_bar(stat="identity") +
   geom_text(aes(label=round(auc,2)), vjust=1.6, color="white", size=3.5)
-#+  theme_minimal()
 p <- p + scale_x_discrete(limits=df_auc$stage)
 p <- p + labs(title="AUC per pick'em stage", x="Stage", y = "AUC")
-#p + theme_classic()
 p <- p + theme(plot.title = element_text(hjust = 0.5))
 p
 
-##Wr accuracies
+###########
+#Accuracy plots
+###########
+
 df_acc <- data.frame(stage=c("QF+SF+F", "QF", "SF", "F"),
                      acc=accuracies)
 
 p2<-ggplot(data=df_acc, aes(x=stage, y=acc)) +
   geom_bar(stat="identity") +
   geom_text(aes(label=round(acc,2)), vjust=1.6, color="white", size=3.5)
-#+  theme_minimal()
 p2 <- p2 + scale_x_discrete(limits=df_acc$stage)
 p2 <- p2 + labs(title="Model prediction accuracy per pick'em stage", x="Stage", y = "Accuracy")
-#p + theme_classic()
 p2 <- p2 + theme(plot.title = element_text(hjust = 0.5))
 p2
 
-
+###########
+#VarImportance plots
+###########
 varimp <- varImp(model)
 df_varimp <- data.frame( field = rownames(varimp), overall = varimp$Overall)
 
-p<-ggplot(data=df_varimp, aes(x=field, y=overall)) +
+p3<-ggplot(data=df_varimp, aes(x=field, y=overall)) +
   geom_bar(stat="identity") +
   geom_text(aes(label=round(overall,2)), vjust=1.6, color="white", size=3.5)
-#+  theme_minimal()
 
-p <- p + scale_x_discrete(limits=df_varimp$field)
-p <- p + labs(title="Field importance", x="Field", y = "Importance")
-#p + theme_classic()
-p <- p + theme(plot.title = element_text(hjust = 0.5))
-p
+p3 <- p3 + scale_x_discrete(limits=df_varimp$field)
+p3 <- p3 + labs(title="Field importance", x="Field", y = "Importance")
+p3 <- p3 + theme(plot.title = element_text(hjust = 0.5))
+p3
+
+###########
+#ROC curve plots
+###########
+
+plot(prf_list[[1]])
+plot(prf_list[[2]], add = TRUE, col=2, lty = 2)
+plot(prf_list[[3]], add = TRUE, col=3, lty = 2)
+plot(prf_list[[4]], add = TRUE, col=4, lty = 2)
 
 
 
