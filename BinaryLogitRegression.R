@@ -34,7 +34,7 @@ prf_listOf_prf_lists <- list()
 library(ROCR)
 
 
-for(version in 3:3){
+for(version in 1:5){
   train_data <- read.csv("train_data.csv")
   test_data <- read.csv("test_data.csv")
   
@@ -57,11 +57,14 @@ for(version in 3:3){
   selected_fields <- c(field_names[1])
   if(withTeamsinfo){selected_fields <- c(selected_fields, field_names[2] )}
   if(withSideinfo){selected_fields <- c(selected_fields, field_names[3] )}
-  if(withChampiongginfo){selected_fields <- c(selected_fields, field_names[4:8] )}
-  if(withPlayerinfo){selected_fields <- c(selected_fields, field_names[9:13] )}
+  if(withChampiongginfo & version != 5){selected_fields <- c(selected_fields, field_names[4:8] )}
+  if(withPlayerinfo & version <= 4){selected_fields <- c(selected_fields, field_names[9:13] )}
+  else {selected_fields <- c(selected_fields, field_names[c(6:8,9:13)] )}
+  
+  print(selected_fields)
   
   train_data <- subset(train_data, select = selected_fields)
-  
+  #if(withPlayerinfo & !withChampiongginfo)
   avoid_0and1 <- F
   if(avoid_0and1){
     results <- train_data$result
@@ -100,7 +103,7 @@ for(version in 3:3){
   
   names(model$coefficients)
   
-  if(withTeamsinfo & withSideinfo & withChampiongginfo & withPlayerinfo){
+  if(withTeamsinfo & withSideinfo & withChampiongginfo & withPlayerinfo & version ==1 ){
     ##WALD TEST: http://www.statisticshowto.com/wald-test/
     #Overall effect of team names
     wald.test(b = coef(model), Sigma = vcov(model), Terms = 2:24)
@@ -120,6 +123,8 @@ for(version in 3:3){
     # wald.test(b = coef(model), Sigma = vcov(model), Terms = 34)
     # wald.test(b = coef(model), Sigma = vcov(model), Terms = 35)
     # 
+    
+    #wald.test(b = coef(model), Sigma = vcov(model), Terms = 7)
   }
   
   
@@ -292,9 +297,9 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   }
 }
 #######
-multiplot(plotlist = plots_p, cols = 4)
-multiplot(plotlist = plots_p2, cols = 4)
-multiplot(plotlist = plots_p3[c(2,4)], cols = 2)
+multiplot(plotlist = plots_p, cols = 5)
+multiplot(plotlist = plots_p2, cols = 5)
+multiplot(plotlist = plots_p3[c(4,5)], cols = 2)
 plots_p3[2]
 
 #par(mfrow = c(2,2),pty="m")
