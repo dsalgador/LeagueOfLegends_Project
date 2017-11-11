@@ -7,9 +7,9 @@ library(ROCR)
 train_data <- read.csv("train_data.csv")
 test_data <- read.csv("test_data.csv")
 
-withTeamsinfo <- T #1
+withTeamsinfo <- F #1
 withSideinfo <- T  #1
-withChampiongginfo <- T #5
+withChampiongginfo <-T #5
 withPlayerinfo <- T
 
 field_names <- names(train_data)
@@ -144,6 +144,14 @@ for(j in 1:4){
   #varImp(model)
 }
 
+
+#install.packages("ddalpha")
+#install.packages("lava")
+library(caret)
+#install.packages("caret")
+
+varImp(model)
+
 ######################
 # GRAPHICS, PLOTS
 ####################
@@ -178,8 +186,19 @@ p2 <- p2 + theme(plot.title = element_text(hjust = 0.5))
 p2
 
 
+varimp <- varImp(model)
+df_varimp <- data.frame( field = rownames(varimp), overall = varimp$Overall)
 
+p<-ggplot(data=df_varimp, aes(x=field, y=overall)) +
+  geom_bar(stat="identity") +
+  geom_text(aes(label=round(overall,2)), vjust=1.6, color="white", size=3.5)
+#+  theme_minimal()
 
+p <- p + scale_x_discrete(limits=df_varimp$field)
+p <- p + labs(title="Field importance", x="Field", y = "Importance")
+#p + theme_classic()
+p <- p + theme(plot.title = element_text(hjust = 0.5))
+p
 
 
 
