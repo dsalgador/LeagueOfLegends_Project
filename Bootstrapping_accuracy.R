@@ -39,7 +39,7 @@ quantile(acc, probs = c(0.05, 0.95))
 
 mean(acc)
 plot(density(acc))
-boxplot(acc,las = 2, xlab = "Base model", ylab = "Accuracy",col="grey")
+boxplot(acc,las = 2, xlab = "Base model", ylab = "Accuracy",col="grey", main="Bootstrap accuracy")
 
 
 data <- acc
