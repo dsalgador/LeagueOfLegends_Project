@@ -34,7 +34,7 @@ prf_listOf_prf_lists <- list()
 library(ROCR)
 
 
-for(version in 3:3){
+for(version in 1:4){
   train_data <- read.csv("train_data.csv")
   test_data <- read.csv("test_data.csv")
   
@@ -95,8 +95,8 @@ for(version in 3:3){
   #install.packages("aod")
   
   ####CIs
-  confint(model)
-  confint.default(model)
+  #print(round(cbind( coef(model),confint(model)),1))
+  round(cbind( coef(model), confint.default(model)) ,1)
   
   names(model$coefficients)
   
@@ -122,7 +122,16 @@ for(version in 3:3){
     # 
   }
   
-  
+  if(version == 2){
+    #Overall effect of side of the map
+    wald.test(b = coef(model), Sigma = vcov(model), Terms = 2)
+    #Overall effect of matchup_champion win rates
+    wald.test(b = coef(model), Sigma = vcov(model), Terms = 3:7)
+
+    #Overall effect of player_champion win rates
+    wald.test(b = coef(model), Sigma = vcov(model), Terms = 8:12)
+    
+  }
   
   
   #########################
@@ -187,14 +196,14 @@ for(version in 3:3){
   #AUC plots
   ###########
   
-  df_auc <- data.frame(stage=c("QF+SF+F", "QF", "SF", "F"),
+  df_auc <- data.frame(stage=c("All", "QF", "SF", "F"),
                        auc=auc_list)
   
   p<-ggplot(data=df_auc, aes(x=stage, y=auc)) +
     geom_bar(stat="identity") +
     geom_text(aes(label=round(auc,2)), vjust=1.6, color="white", size=3.5)
   p <- p + scale_x_discrete(limits=df_auc$stage)
-  p <- p + labs(title=paste("AUC",version_name), x="Pick'em stage", y = "AUC")
+  p <- p + labs(title=paste("",version_name), x="Pick'em stage", y = "AUC")
   p <- p + theme(plot.title = element_text(hjust = 0.5))
   plots_p[[version]] <- p
   
@@ -202,7 +211,7 @@ for(version in 3:3){
   #Accuracy plots
   ###########
   
-  df_acc <- data.frame(stage=c("QF+SF+F", "QF", "SF", "F"),
+  df_acc <- data.frame(stage=c("All", "QF", "SF", "F"),
                        acc=accuracies)
   
   p2<-ggplot(data=df_acc, aes(x=stage, y=acc)) +
@@ -211,7 +220,7 @@ for(version in 3:3){
     #annotate("text", 'F', mean_accuracy[[1]], vjust = -1, label = "Mean pick'em accuracy")+
     geom_text(aes(label=round(acc,2)), vjust=1.6, color="white", size=3.5)
   p2 <- p2 + scale_x_discrete(limits=df_acc$stage)
-  p2 <- p2 + labs(title=paste("Accuracy", version_name), x="Pick'em stage", y = "Accuracy")
+  p2 <- p2 + labs(title=paste("", version_name), x="Pick'em stage", y = "Accuracy")
   p2 <- p2 + theme(plot.title = element_text(hjust = 0.5))
   #p2 <- p2 +  geom_hline(yintercept = mean_accuracy[[1]]) 
   plots_p2[[version]] <- p2
@@ -296,17 +305,45 @@ multiplot(plotlist = plots_p, cols = 4)
 multiplot(plotlist = plots_p2, cols = 4)
 multiplot(plotlist = plots_p3[c(2,4)], cols = 2)
 plots_p3[2]
-
+plots_p3[4]
 #par(mfrow = c(2,2),pty="m")
-par(mfrow = c(1,4), pty = 's')
+par(mfrow = c(2,2), pty = 's')
 for(ver in 1:4){
   prf_list = prf_listOf_prf_lists[[ver]]
-  plot(prf_list[[1]], xlim = c(0,1), ylim = c(0,1), lwd =1.5)
+  plot(prf_list[[1]], xlim = c(0,1), ylim = c(0,1), lwd =1.5, main = paste("Model v",ver, sep = ""))
+  #legend(0.8,0.2, c("QF+SF+F,QF, SF, F") , lty = c(1,2,2,2), lwd = 1.5, col = 1:4)
+  
   plot(prf_list[[2]], add = TRUE, col=2, lty = 2, lwd =1.5)
   plot(prf_list[[3]], add = TRUE, col=3, lty = 2, lwd =1.5)
   plot(prf_list[[4]], add = TRUE, col=4, lty = 2, lwd =1.5)
-  
+
 }
 
 par(mfrow = c(1,1), pty = 'm')
+ver = 1
+prf_list = prf_listOf_prf_lists[[ver]]
+plot(prf_list[[1]], xlim = c(0,1), ylim = c(0,1), lwd =1.5)
+legend("right",cex = 0.75, bty = 'n',c("QF+SF+F","QF", "SF", "F") , lty = c(1,2,2,2), lwd = 1.5, col = 1:4)
 
+plot(prf_list[[2]], add = TRUE, col=2, lty = 2, lwd =1.5)
+plot(prf_list[[3]], add = TRUE, col=3, lty = 2, lwd =1.5)
+plot(prf_list[[4]], add = TRUE, col=4, lty = 2, lwd =1.5)
+
+
+##Analysing predictivity of Finals by the four models 
+#
+
+v1 =c(0.9999988, 0.5308298, 0.9999919, 0.0108322, 0.9965328, 0.5184713) 
+v2= c(0.9954209, 0.6160834, 0.9861073, 0.2659355, 0.8761955, 0.8145542) 
+v3 = c(0.9952628, 0.6327470, 0.9855164, 0.2798750, 0.8731010, 0.8217733)
+v4 = c(0.9842462, 0.8421150, 0.9407421, 0.7601461, 0.9365140, 0.6324281)
+
+v = rbind(v1,v2,v3,v4)
+
+par(mfrow = c(1,3))
+plot(v[,1]- v[,2],cex.lab = 1.5 ,pch = 21, bg = 1, cex = 2, main = "First match", xaxt = 'n', xlab = "Model", ylab = "P(SSG win) - P(SKT win)")
+axis(side = 1, at = seq(1,4,1))
+plot(v[,3]- v[,4],cex.lab = 1.5,pch = 21, bg = 1, cex = 2, main = "Second match",xaxt = 'n', xlab = "Model", ylab = "P(SSG win) - P(SKT win)")
+axis(side = 1, at = seq(1,4,1))
+plot(v[,5]- v[,6],cex.lab = 1.5,pch = 21, bg = 1, cex = 2, main = "Third match",xaxt = 'n', xlab = "Model", ylab = "P(SSG win) - P(SKT win)")
+axis(side = 1, at = seq(1,4,1))
