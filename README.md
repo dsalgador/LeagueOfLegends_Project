@@ -9,19 +9,22 @@ This game also has the most solid competitive structure between all the e-sports
 
 The aim of our project is to predict some of the results of the 2017 World Championship, the biggest event in the e-sports, using open data resources from different APIs. To do it, we will use the data of the different professional players and teams which compete in the World Championship, and the data of the different champions that they can play, and we will develop a logistic regression model to predict the results of the knock-out stage (quarter-finals, semi-finals and final) using data from the group stage.
 
-## Data sources:
 
-* Matches: http://oracleselixir.com/match-data/, Data Dictionary: http://oracleselixir.com/match-data/match-data-dictionary/
-* http://champion.gg/ API
-* Riot API: https://developer.riotgames.com/
-* https://lol.gamepedia.com/playername (example: playername = Faker)
+## References and Data sources
 
-The .xlsx files have been converted to .cvs via the web page https://convertio.co/es/xlsx-csv/
-
-## References
-Logistic regression resources:
-* https://www.r-bloggers.com/how-to-perform-a-logistic-regression-in-r/
-* https://www.r-bloggers.com/evaluating-logistic-regression-models/
+* [1] Binary logistic regression in R, https://www.r-bloggers.com/evaluating-logistic-regression-models/
+* [2] Binary logistic regression example (Titanic survivors) https://www.r-bloggers.com/how-to-perform-a-logistic-regression-in-r/.
+* [3] Binary logistic regression with a single categorical predictor https://onlinecourses.science.psu.edu/stat504/node/150
+* [4] Binary logistic regression with a categorical predictor of multiple levels https://onlinecourses.science.psu.edu/stat504/node/152
+* [5] Static champion data (in english) from patch 7.19 http://ddragon.leagueoflegends.com/cdn/7.19.1/data/en_US/champion.json
+* [6] Champion.gg API http://api.champion.gg/.
+* [7] Leaguepedia: https://lol.gamepedia.com/<player_name>/Champion_Statistics, where <player_name> must be substituted by the professional Player of interest.
+* [8] Tim Sevenhuysen, OraclesElixir.com, 2017. http://oracleselixir.com/gamedata/2017-worlds/.
+* [9] xlsx to csv online converter: https://convertio.co/es/xlsx-csv/.
+* [10] Visualization and statistics of logistic regressions in R https://stats.idre.ucla.edu/r/dae/logit-regression/.
+* [11] Knock out stage Worlds 2017 pick’em results. http://pickem.euw.lolesports.com/en-GB#leaderboards/everyone
+* [12] Bootstrap and permutation tests lectures, Pere Puig (Department of Mathematics from the UAB), Data Visualization and Modelling (subject from the Master’s).
+* [13] The 2017 Worlds finals between SKT and Samsung Galaxy will be all about adapting, by Austen Goslin.https://www.riftherald.com/lol-worlds/2017/11/3/16603216/lol-worlds-finals-2017-skt-ssg-preview22
 
 ## License
 
