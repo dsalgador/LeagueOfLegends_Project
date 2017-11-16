@@ -51,7 +51,7 @@ winrates_table <- function(POSITION, ROLE){
   m=length(data2$"matchups"[, ROLE])
   for(i in 1:m){
     if(!is.null(data2$"matchups"[, ROLE][[i]])){
-      n = dim(data2$"matchups"[, ROLE][[i]])[1] #número de files
+      n = dim(data2$"matchups"[, ROLE][[i]])[1] #nÃºmero de files
       if(length(n)<1) break;
       for(j in 1:(n)  ){
         id1 = data2$"matchups"[, ROLE][[i]]$champ1_id[j]
@@ -135,8 +135,8 @@ team2 = c("Dr. Mundo", "Xin Zhao", "Taliyah", "Lucian", "Janna" )
 
 winrate_match(team1, team2)
 
-#IMPORTANT: if some champion mathes have no data available, the winrate is
-#set to 1.00.
+#IMPORTANT: if some champion matches have no data available, the win rate is
+#set to 0.5.
 
 
 
