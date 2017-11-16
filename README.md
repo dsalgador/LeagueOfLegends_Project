@@ -28,6 +28,11 @@ The aim of this project is to predict results of the 2017 World Championship, th
 * [11] Knock out stage Worlds 2017 pick’em results. http://pickem.euw.lolesports.com/en-GB#leaderboards/everyone
 * [12] Bootstrap and permutation tests lectures, Pere Puig (Department of Mathematics from the UAB), Data Visualization and Modelling (subject from the Master’s).
 * [13] The 2017 Worlds finals between SKT and Samsung Galaxy will be all about adapting, by Austen Goslin.https://www.riftherald.com/lol-worlds/2017/11/3/16603216/lol-worlds-finals-2017-skt-ssg-preview22
+* [14] Terms and limitations of the Riot API. https://developer.riotgames.com/terms-and-conditions.html#limitations
+* [15] Scrapy software and documentation. https://scrapy.org/
+* [16] Example of data extracting from a table using Scrapy. http://www.olafdietsche.de/2015/04/05/extracting-table-data-with-scrapy
+* [17] Creative commons information. https://creativecommons.org/
+* [18] Riot API webpage, https://developer.riotgames.com/.
 
 ## License
 
